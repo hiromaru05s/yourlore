@@ -1,7 +1,7 @@
 import {profileBackground, type ProfileBackground} from '../shared/profileAppearance';
 import {SEEKER_ID} from '../ui/seekerMotion';
 import { t } from '../i18n';
-import {cosmetic} from '../shared/cosmetics';
+import {cosmetic,equipmentId,cosmeticAvailable} from '../shared/cosmetics';
 import { DECK_POOL, type DeckStore, sanitizeDecks } from "../shared/cards";
 
 const LOCAL_DECKS_KEY = "lore_local_dev_decks";
@@ -51,16 +51,16 @@ export function loadLocalGuestProfile(): LocalGuestProfile {
   try {
     const saved = JSON.parse(localStorage.getItem(LOCAL_GUEST_PROFILE_KEY) || "null") as Partial<LocalGuestProfile> | null;
     if (saved && Number.isFinite(saved.credits) && Array.isArray(saved.sleeves)) {
-      return { avatar:saved.avatar ?? SEEKER_ID, background:profileBackground(saved.background), credits: Math.max(0, Math.floor(saved.credits!)), sleeves: [...new Set(["default", ...saved.sleeves])], sleeve: saved.sleeve || "prism" };
+      return { avatar:saved.avatar ?? SEEKER_ID, background:profileBackground(saved.background), credits: Math.max(0, Math.floor(saved.credits!)), sleeves: [...new Set(["default", ...saved.sleeves])], sleeve: equipmentId(saved.sleeve,'sleeve') };
     }
   } catch { /* create a fresh local profile */ }
-  const profile = { credits: 12, sleeves: ["default", "prism"], sleeve: "prism" };
+  const profile = { credits: 12, sleeves: ["default", "prism"], sleeve: "default" };
   saveLocalGuestProfile(profile);
   return profile;
 }
 
 export function saveLocalGuestProfile(profile: LocalGuestProfile): LocalGuestProfile {
-  const saved = { avatar:profile.avatar ?? SEEKER_ID, background:profileBackground(profile.background), credits: Math.max(0, Math.floor(profile.credits)), sleeves: [...new Set(["default", ...profile.sleeves])], sleeve: profile.sleeve || "default" };
+  const saved = { avatar:profile.avatar ?? SEEKER_ID, background:profileBackground(profile.background), credits: Math.max(0, Math.floor(profile.credits)), sleeves: [...new Set(["default", ...profile.sleeves])], sleeve: equipmentId(profile.sleeve,'sleeve') };
   localStorage.setItem(LOCAL_GUEST_PROFILE_KEY, JSON.stringify(saved));
   return saved;
 }
@@ -71,7 +71,7 @@ export function saveLocalAppearance(avatar: string | null, background: ProfileBa
 
 export function buyLocalGuestSleeve(id: string): { credits: number; sleeves: string[]; furnitures:string[] } {
   const sleeve = cosmetic(id);
-  if (!sleeve || sleeve.price < 0 || ('gachaOnly' in sleeve&&sleeve.gachaOnly)) throw new Error("구매할 수 없는 상품입니다.");
+  if (!sleeve || !cosmeticAvailable(sleeve) || sleeve.price < 0 || ('gachaOnly' in sleeve&&sleeve.gachaOnly)) throw new Error("구매할 수 없는 상품입니다.");
   const profile = loadLocalGuestProfile();
   if (profile.sleeves.includes(id)) return { credits: profile.credits, sleeves: profile.sleeves, furnitures:profile.sleeves.filter(id=>id.startsWith("furniture:")) };
   if (profile.credits < sleeve.price) throw new Error(t("shop.nocredit"));

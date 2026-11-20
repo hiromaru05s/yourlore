@@ -4,7 +4,7 @@ import {parseUsername} from '../../client/src/shared/username';
 import {medalState} from './medals';
 import {starterCollection,constrainDeckStore} from '../../client/src/shared/collection';
 import {deckStoreForUser} from '../../client/src/shared/cards';
-import {cosmetic,ownedCosmetics} from '../../client/src/shared/cosmetics';
+import {cosmetic,ownedCosmetics,equipmentId,cosmeticAvailable} from '../../client/src/shared/cosmetics';
 // ============================================================
 // LORE server — social: profiles, friends, friendly challenges.
 //   · Profile: display rename / preset avatar / equipped badge /
@@ -79,7 +79,7 @@ async function profileOf(env: Env, targetId: string, viewer: SessionUser | null)
     ...(self ? {
       medals: await medalState(env, u.id, Date.now(), true),
       credits: u.credits,
-      sleeve: u.sleeve || "default",
+      sleeve: equipmentId(u.sleeve,'sleeve'),
       sleeves: ownedCosmetics(u.sleeves).filter(id=>!id.startsWith("furniture:")&&!isCardEffect(id)&&!isCardFrame(id)),
       effects: ownedCosmetics(u.sleeves).filter(isCardEffect),
       frames: ownedCosmetics(u.sleeves).filter(isCardFrame),
@@ -175,6 +175,7 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
     if (typeof body.stats_public === "boolean") { sets.push("stats_public = ?"); args.push(body.stats_public ? 1 : 0); }
     for(const kind of ['sleeve','furniture'] as const){
       const id=body[kind];if(typeof id!=='string')continue;
+      if(kind==='sleeve'&&id!=='default')return json(env,{error:'このスリーブは現在利用できません'},400);
       const row=await env.DB.prepare('SELECT sleeves FROM users WHERE id = ?').bind(user.id).first<{sleeves:string|null}>();
       if(id!=='default'&&(!ownedCosmetics(row?.sleeves).includes(id)||cosmetic(id)?.kind!==kind))return json(env,{error:'未所持の商品です'},400);
       sets.push(`${kind} = ?`);args.push(id==='default'?null:id);
@@ -183,13 +184,13 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
     await env.DB.prepare(`UPDATE users SET ${sets.join(", ")} WHERE id = ?`).bind(...args, user.id).run();
     const u = await env.DB.prepare(`SELECT display, username_set, avatar, profile_background, badge, stats_public, sleeve, furniture FROM users WHERE id = ?`).bind(user.id)
       .first<{ display: string; username_set: number; avatar: string | null; profile_background: string; badge: string | null; stats_public: number; sleeve: string | null; furniture: string | null }>();
-    return json(env, { ok: true, display: u?.display, needsUsername: u?.username_set !== 1, avatar: u?.avatar, background: u?.profile_background, badge: u?.badge, stats_public: !!u?.stats_public, sleeve: u?.sleeve||"default", furniture:u?.furniture||"default" });
+    return json(env, { ok: true, display: u?.display, needsUsername: u?.username_set !== 1, avatar: u?.avatar, background: u?.profile_background, badge: u?.badge, stats_public: !!u?.stats_public, sleeve: equipmentId(u?.sleeve,'sleeve'), furniture:u?.furniture||"default" });
   }
 
   // Permanent purchases debit and grant in one statement. Retrying an owned item never charges again.
   if ((path === '/social/buy-sleeve'||path==='/social/buy-cosmetic') && req.method === 'POST') {
     const body=await req.json().catch(()=>({})) as {id?:string};const item=cosmetic(body.id||'');
-    if(!item||!Number.isSafeInteger(item.price)||item.price<0||('gachaOnly' in item&&item.gachaOnly))return json(env,{error:'販売中の商品ではありません'},400);
+    if(!item||!cosmeticAvailable(item)||!Number.isSafeInteger(item.price)||item.price<0||('gachaOnly' in item&&item.gachaOnly))return json(env,{error:'販売中の商品ではありません'},400);
     await env.DB.prepare(`UPDATE users SET credits = credits - ?3, sleeves = json_insert(CASE WHEN json_valid(sleeves) AND json_type(sleeves) = 'array' THEN sleeves ELSE '[]' END, '$[#]', ?1) WHERE id = ?2 AND credits >= ?3 AND NOT EXISTS (SELECT 1 FROM json_each(CASE WHEN json_valid(sleeves) AND json_type(sleeves) = 'array' THEN sleeves ELSE '[]' END) WHERE value = ?1)`).bind(item.id,user.id,item.price).run();
     const row=await env.DB.prepare('SELECT credits,sleeves FROM users WHERE id = ?').bind(user.id).first<{credits:number;sleeves:string|null}>();
     const ids=ownedCosmetics(row?.sleeves);if(!ids.includes(item.id))return json(env,{error:'not enough shards'},400);return json(env,{ok:true,credits:row?.credits??0,sleeves:ids.filter(id=>!id.startsWith('furniture:')&&!isCardEffect(id)&&!isCardFrame(id)),furnitures:ids.filter(id=>id==='default'||id.startsWith('furniture:')),frames:ids.filter(isCardFrame)});

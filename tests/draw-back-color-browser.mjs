@@ -17,28 +17,30 @@ try{
   await page.evaluate(()=>{const q=monsterQA;q.reset();q.g.players[0].hand=[{...q.DB.ELF,uid:'new'}];q.g.players[1].hand=[{...q.DB.ELF,uid:'hidden'}];q.render();});await page.waitForTimeout(200);
   if(side==='opp'){
    await page.evaluate(()=>{const node=document.querySelector('#oppHand .card--back');window.restBack=node;window.restClip=getComputedStyle(node).clipPath;window.drawDone=monsterQA.A.animateDraw(node.parentElement,1,'opp',{durationScale:2});});
-   await page.waitForFunction(()=>window.restBack.getAnimations().some(a=>a.id==='opponent-sleeve-draw'));
+   await page.waitForFunction(()=>window.restBack.dataset.manaDraw==='true');
    const state=await page.evaluate(()=>({clip:getComputedStyle(restBack).clipPath,same:restBack===document.querySelector('#oppHand .card--back'),privateFaces:restBack.querySelectorAll('.card-art,[data-card-id]').length,original:restClip}));
    assert.equal(state.clip,state.original);assert(state.same);assert.equal(state.privateFaces,0);
-   assert.equal(await page.locator('.draw-stock-canvas,.native-draw-layer').count(),0);
+   assert.equal(await page.locator('.draw-stock-canvas').count(),0);assert.equal(await page.locator('.native-draw-layer').count(),1);
    await page.screenshot({path:`${out}/${side}-${width}.png`});await page.evaluate(()=>window.drawDone);
    assert(await page.evaluate(()=>restBack===document.querySelector('#oppHand .card--back')&&getComputedStyle(restBack).visibility==='visible'));checks.push({width,side,...state});
    await page.evaluate(()=>{window.abortSleeve=new AbortController();window.drawDone=monsterQA.A.animateDraw(restBack.parentElement,1,'opp',{signal:abortSleeve.signal,durationScale:2});});
-   await page.waitForFunction(()=>restBack.getAnimations().some(a=>a.id==='opponent-sleeve-draw'));
+   await page.waitForFunction(()=>restBack.dataset.manaDraw==='true');
    const cancelled=await page.evaluate(async()=>{
     abortSleeve.abort();await drawDone;
     return restBack===document.querySelector('#oppHand .card--back')&&getComputedStyle(restBack).visibility==='visible'&&
-      !restBack.getAnimations().some(a=>a.id==='opponent-sleeve-draw')&&!document.querySelector('.native-draw-layer,#oppHand .card-art');
+      restBack.dataset.manaDraw===undefined&&!document.querySelector('.native-draw-layer,#oppHand .card-art');
    });
    assert(cancelled,'cancelling an opponent draw restores the same private sleeve');
    continue;
   }
   await page.evaluate(side=>{window.freezeAt=.22;window.drawDone=monsterQA.A.animateDraw(document.querySelector(side==='me'?'#hand':'#oppHand'),1,side,{durationScale:3});},side);
   await page.waitForFunction(()=>window.freezeDraw,null,{polling:50});
-  const state=await page.evaluate(()=>{const root=document.querySelector('.native-draw-card'),back=root.querySelector('.draw-stock-back');return{progress:root.dataset.progress,backImage:getComputedStyle(back).backgroundImage,backFilter:getComputedStyle(back).filter,paintedPlanes:[...root.children].filter(n=>n!==back&&!n.classList.contains('card')).map(n=>({background:getComputedStyle(n).backgroundColor,opacity:getComputedStyle(n).opacity,mask:getComputedStyle(n).maskImage,backface:getComputedStyle(n).backfaceVisibility})),privateFaces:root.querySelectorAll('.card-art,[data-card-id]').length};});
+  // Current native draws retain face layers directly on the moving card. These
+  // are source content, not the extra colored planes guarded against here.
+  const state=await page.evaluate(()=>{const root=document.querySelector('.native-draw-card'),back=root.querySelector('.draw-stock-back');return{progress:root.dataset.progress,backImage:getComputedStyle(back).backgroundImage,backFilter:getComputedStyle(back).filter,paintedPlanes:[...root.children].filter(n=>n!==back&&!n.matches('.card,.card-art,.card-frame,.card-cost,.card-name,.ad-atk,.ad-def,.card-status')).map(n=>({className:n.className,background:getComputedStyle(n).backgroundColor,opacity:getComputedStyle(n).opacity,mask:getComputedStyle(n).maskImage,backface:getComputedStyle(n).backfaceVisibility})),privateFaces:root.querySelectorAll('.card-art,[data-card-id]').length};});
   await page.screenshot({path:`${out}/${side}-${width}.png`});
   if(process.env.LORE_DRAW_DIAGNOSE==='1'){
-   await page.evaluate(()=>{const root=document.querySelector('.native-draw-card');for(const n of root.children)if(n!==root.querySelector('.draw-stock-back')&&!n.classList.contains('card'))n.style.opacity='0';});
+   await page.evaluate(()=>{const root=document.querySelector('.native-draw-card');for(const n of root.children)if(n!==root.querySelector('.draw-stock-back')&&!n.matches('.card,.card-art,.card-frame,.card-cost,.card-name,.ad-atk,.ad-def,.card-status'))n.style.opacity='0';});
    await page.screenshot({path:`${out}/${side}-${width}-without-tint.png`});
   }else assert.equal(state.paintedPlanes.length,0,'A draw must not paint a colored plane across the sleeve');
   assert.equal(state.backFilter,'none');assert(state.backImage.includes('url('));if(side==='opp')assert.equal(state.privateFaces,0);

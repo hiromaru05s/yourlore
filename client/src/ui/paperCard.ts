@@ -1,3 +1,4 @@
+import {cardStockShape} from './cardStockShape';
 import {PAPER_CARD_HALF_THICKNESS} from './cardThickness';
 import * as T from 'three';
 import { CARD_PADDING, type CardSurface } from './cardSurface';
@@ -55,18 +56,9 @@ export class PaperCard {
     // Looking at the reverse must not mirror sleeve lettering.
     const uv=back.getAttribute('uv');for(let i=0;i<uv.count;i++)uv.setX(i,1-uv.getX(i));
     add(back,mat(texture(surface.back),T.BackSide));
-    // Thin rounded stock, inset beneath the ornamental frame. Faces are drawn
+    // Thin stock follows the authored outer frame. Faces are drawn
     // separately; only the exposed paper edge is geometry here.
-    const outline:T.Vector2[]=[];
-    const radius=.045, hw=.475, hh=ratio/2-.045;
-    for(let corner=0;corner<4;corner++){
-      const cx=corner===0||corner===3?hw-radius:-hw+radius;
-      const cy=corner<2?hh-radius:-hh+radius;
-      for(let i=0;i<=16;i++){
-        const a=(corner*90+i*90/16)*Math.PI/180;
-        outline.push(new T.Vector2(cx+Math.cos(a)*radius,cy+Math.sin(a)*radius));
-      }
-    }
+    const outline=cardStockShape(ratio).getPoints();
     const vertices:number[]=[],indices:number[]=[];
     // Subdivide straight edge spans as well, so the edge follows the surface bend.
     const perimeter:T.Vector2[]=[];

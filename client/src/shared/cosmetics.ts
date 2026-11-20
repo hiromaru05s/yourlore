@@ -31,11 +31,15 @@ GACHA_COSMETICS.push(
 // Gacha cosmetics and directly sold frame materials. Unknown legacy equipment
 // resolves to the standard appearance through equipmentId/sleeveUrl.
 export const COSMETICS:Cosmetic[] = [...GACHA_COSMETICS,...CARD_FRAMES];
+// Keep retired sleeves in the ownership catalog; only default can be used for now.
+export const cosmeticAvailable=(item:Cosmetic):boolean=>item.kind!=='sleeve';
+export const AVAILABLE_GACHA_COSMETICS=GACHA_COSMETICS.filter(cosmeticAvailable);
 export const FURNITURE_LIST=COSMETICS.filter(c=>c.kind==='furniture');
 export const cosmetic=(id:string)=>COSMETICS.find(c=>c.id===id);
 export const furnitureUrl=(id:string|null|undefined)=>FURNITURE_LIST.find(c=>c.id===id)?.url;
 export function ownedCosmetics(raw:string|null|undefined):string[]{try{const ids=JSON.parse(raw||'[]');return ['default',...new Set<string>(Array.isArray(ids)?ids.filter((id:unknown)=>typeof id==='string'&&(!!cosmetic(id)||isCardEffect(id))):[])];}catch{return ['default'];}}
 
 export function equipmentId(value:unknown,kind:Cosmetic['kind']):string {
+ if(kind==='sleeve')return 'default';
  return typeof value==='string'&&cosmetic(value)?.kind===kind?value:'default';
 }

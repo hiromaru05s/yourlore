@@ -1,6 +1,6 @@
 import {ONBOARDING_BASICS,ONBOARDING_DRAW,ONBOARDING_BUY} from '../../client/src/shared/onboarding';
 import {dailyStarterShop,DAILY_STARTER_LIMIT} from '../../client/src/shared/dailyStarterShop';
-import {GACHA_COSMETICS,cosmetic} from '../../client/src/shared/cosmetics';
+import {AVAILABLE_GACHA_COSMETICS,cosmetic} from '../../client/src/shared/cosmetics';
 import {CARD_EFFECTS,isCardEffect,type CardEffectId} from '../../client/src/shared/cardEffects';
 import {COLLECTIBLE_STARTERS,starterCollection,STARTER_PRICE,GACHA_PRICE,DUPLICATE_REFUNDS,type CollectionReceipt,gachaCategory,type CollectionReward} from '../../client/src/shared/collection';
 import type {Env,SessionUser} from './env';
@@ -69,7 +69,7 @@ export async function handleCollection(env:Env,req:Request,path:string,user:Sess
   }
   picks??=kind==='buy'?Array.from({length:count},()=>({kind:'starter' as const,id:id as string})):Array.from({length:count},()=>{
    const category=gachaCategory(randomIndex(10000));
-   if(category==='cosmetic')return GACHA_COSMETICS.length?{kind:'cosmetic' as const,id:GACHA_COSMETICS[randomIndex(GACHA_COSMETICS.length)].id}:{kind:'empty' as const,id:'cosmetic-pending'};
+   if(category==='cosmetic')return AVAILABLE_GACHA_COSMETICS.length?{kind:'cosmetic' as const,id:AVAILABLE_GACHA_COSMETICS[randomIndex(AVAILABLE_GACHA_COSMETICS.length)].id}:{kind:'empty' as const,id:'cosmetic-pending'};
    return {kind:category,id:category==='starter'?COLLECTIBLE_STARTERS[randomIndex(COLLECTIBLE_STARTERS.length)]:CARD_EFFECTS[randomIndex(CARD_EFFECTS.length)].id};
   });
   const rewards:CollectionReward[]=picks.map(pick=>{

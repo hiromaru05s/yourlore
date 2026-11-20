@@ -62,7 +62,8 @@ export function warmCardSurface(node:HTMLElement):void{
 export interface CardSurface { face: HTMLCanvasElement | null; back: HTMLCanvasElement; }
 /** Identity-free sleeve surface shared by draw and library reshuffle meshes. */
 function paintSleeve(ctx:CanvasRenderingContext2D,img:HTMLImageElement,pad:number,w:number,h:number){
- ctx.save();ctx.beginPath();ctx.roundRect(pad+w*.03,pad+h*.03,w*.94,h*.94,w*.12);ctx.clip();ctx.drawImage(img,pad,pad,w,h);ctx.restore();
+ // The sleeve alpha carries the same outer contour as the face frame.
+ ctx.drawImage(img,pad,pad,w,h);
 }
 export async function captureCardBack(sleeve:string,ratio=1/.64):Promise<CardSurface> {
   const w=RESOLUTION,h=w*ratio,pad=w*CARD_PADDING;

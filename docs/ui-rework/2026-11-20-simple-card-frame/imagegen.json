@@ -1,0 +1,12 @@
+{
+  "mode":"built-in image_gen image editing",
+  "sourceDirectory":"/Users/hiromaru05s/.codex/generated_images/01a1f366-7e3f-7300-a05d-004ca545fafd",
+  "edits":[
+    {"target":"base-mon.png","output":"exec-75ae245a-84a6-43b0-bb5b-4b9cdfd693a0.png","reference":"base-quest.png","prompt":"Edit the red monster frame only: remove the large compass/star/diamond medallion at top center and reconstruct a continuous ivory/silver gently arched top border like the quest. Preserve red color, navy interior, bottom tip, side details, banner/window positions and proportions. 1024x1536, solid black exterior, no text."},
+    {"target":"base-spell.png","output":"exec-89487979-a3ea-45d4-abc3-9f63a83f022d.png","reference":"base-quest.png","prompt":"Edit the blue spell frame only: remove the top-center compass medallion, reconstruct a continuous ivory/silver gently arched top border like the quest. Preserve all other details, blue color, navy interior, banner/window, bottom tip and proportions. 1024x1536, solid black exterior, no text."},
+    {"target":"field-mon.png","output":"exec-73dcadd2-df7d-4e3a-93fe-6013659da42a.png","prompt":"Remove ONLY the top compass medallion, restoring a smooth ivory/silver arch. Preserve all other geometry, black exterior, navy interior, red sides, lower compass detail. 1122x1402, no crop, recenter or text."},
+    {"target":"field-spell.png","output":"exec-2ed907fb-f44a-4361-a186-f1bfadbb4093.png","prompt":"Remove ONLY the top compass medallion, restoring a smooth ivory/silver arch. Preserve all other geometry, black exterior, navy interior, blue sides, lower compass detail. 1122x1402, no crop, recenter or text."},
+    {"target":"sleeve_default.png","output":"exec-a66568e6-27b0-4e6e-948b-b9c39b1048d9.png","references":["edited base-spell.png","previous sleeve_default.png"],"prompt":"Match the edited front frame's ivory/silver silhouette, smooth top arch with no protruding topper, rounded shoulders, narrow rails and bottom point. Remove the title banner and fill one full-height navy inset with the existing blue eye and silver geometric tracery. Flat orthographic texture, 1024x1536, opaque navy inside and true transparent exterior. Follow-up edit: remove only the beige exterior background, preserve the whole card and canvas, no shadow."}
+  ],
+  "note":"Prompts above are concise records of the submitted instructions. Generated outputs are installed into the workspace; the final cutout alpha is retained. Only output size normalization and existing production derivative encoding follow imagegen."
+}

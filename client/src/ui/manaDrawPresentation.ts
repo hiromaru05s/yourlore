@@ -42,7 +42,7 @@ export class ManaDrawPresentation {
    n.style.setProperty('transition','none','important');n.style.pointerEvents='none';if(s.index>=0)n.classList.add('native-draw-card');
    if(s.index>=0&&!this.opponent){
     n.classList.remove('is-dim','is-exhausted','is-playable','is-buyable','has-play-condition');
-    const back=s.back=document.createElement('div');back.className='draw-stock-back';back.style.cssText=`position:absolute;inset:0;border-radius:5.2%;background:url("${this.sleeve}") center/100% 100%;transform:translateZ(${-s.w*DRAW_THICKNESS_RATIO}px) rotateY(180deg);box-shadow:inset 0 0 0 1px #b1c3d155;pointer-events:none`;n.append(back);s.finish=decorateDrawBack(back,this.sleeve);
+    const back=s.back=document.createElement('div');back.className='draw-stock-back';back.style.cssText=`position:absolute;inset:0;border-radius:0;background:url("${this.sleeve}") center/100% 100%;transform:translateZ(${-s.w*DRAW_THICKNESS_RATIO}px) rotateY(180deg);pointer-events:none`;n.append(back);s.finish=decorateDrawBack(back,this.sleeve);
    }
   }
   this.mounted=true;

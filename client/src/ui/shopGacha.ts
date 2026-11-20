@@ -1,5 +1,5 @@
 import {homeIcon} from './homeIcons';
-import {GACHA_COSMETICS} from '../shared/cosmetics';
+import {AVAILABLE_GACHA_COSMETICS} from '../shared/cosmetics';
 import {mountRewardGallery} from './gachaRewardStage';
 import {loungeText as l} from './loungeText';
 import {openGachaCinematic,prepareGachaCinematic} from './gachaCinematic';
@@ -14,10 +14,9 @@ import '../styles/shopGachaTable.css';
 export type GachaVariant=1|2|3;
 const label=()=>l('ビブリオンのコレクション','Biblion Collection','비블리온 컬렉션');
 const rewardList=(receipt:CollectionReceipt)=>`<div class="reward-results-summary"><span>${l('消費','Spent','사용')} <strong>${receipt.cost}</strong> ${l('シャード','Shards','샤드')}</span><span>${l('重複還元','Duplicate refund','중복 환급')} <strong>+${receipt.refund}</strong></span><span>${receipt.rewards.length} ${l('個の結果','results','개 결과')}</span></div><div data-receipt="${esc(receipt.requestId)}"></div>`;
-const cosmeticRate=()=>String(7/GACHA_COSMETICS.length);
-const sleeveCount=()=>GACHA_COSMETICS.filter(c=>c.kind==='sleeve').length;
-const furnitureCount=()=>GACHA_COSMETICS.filter(c=>c.kind==='furniture').length;
-const rateDetails=()=>`<table><tbody><tr><th>${l('スターター','Starter','스타터')}</th><td>92.5%</td></tr><tr><th>${l('スリーブ・デッキ置き場＆墓地','Sleeves & deck holder / graveyard','슬리브·덱 받침 & 묘지')}</th><td>7%</td></tr><tr><th>${l('エフェクト3種（均等）','3 effects (equal odds)','이펙트 3종 (동일 확률)')}</th><td>0.5%</td></tr></tbody></table><p>${l(`スリーブ${sleeveCount()}種とデッキ置き場＆墓地${furnitureCount()}種は別々に排出、各${cosmeticRate()}%。スターターは各種類均等、エフェクトは各1/600（約0.1667%）。10回も1回ずつ同じ抽選です。`,`${sleeveCount()} sleeves and ${furnitureCount()} deck holder/graveyard items drop separately at ${cosmeticRate()}% each. Starters have equal per-type odds. Each effect: 1/600 (about 0.1667%). Ten draws use the same independent odds.`,`슬리브 ${sleeveCount()}종과 덱 받침·묘지 ${furnitureCount()}종은 별도 배출되며 각각 ${cosmeticRate()}%. 스타터는 종류별 동일 확률, 각 이펙트는 1/600 (약 0.1667%). 10회도 매회 같은 추첨입니다.`)}</p><p>${l('重複還元：スターター8枚所持時50／スリーブ・家具100／エフェクト500シャード。','Duplicates: 50 Shards for starters at 8 copies / 100 for owned sleeves or furniture / 500 for owned effects.','중복 환급: 스타터 8장 보유 시 50 / 보유 슬리브·가구 100 / 이펙트 500샤드.')}</p>`;
+const cosmeticRate=()=>String(7/AVAILABLE_GACHA_COSMETICS.length);
+const furnitureCount=()=>AVAILABLE_GACHA_COSMETICS.filter(c=>c.kind==='furniture').length;
+const rateDetails=()=>`<table><tbody><tr><th>${l('スターター','Starter','스타터')}</th><td>92.5%</td></tr><tr><th>${l('デッキ置き場＆墓地','Deck holder / graveyard','덱 받침 & 묘지')}</th><td>7%</td></tr><tr><th>${l('エフェクト3種（均等）','3 effects (equal odds)','이펙트 3종 (동일 확률)')}</th><td>0.5%</td></tr></tbody></table><p>${l(`デッキ置き場＆墓地${furnitureCount()}種は各${cosmeticRate()}%。スターターは各種類均等、エフェクトは各1/600（約0.1667%）。10回も1回ずつ同じ抽選です。`,`${furnitureCount()} deck holder/graveyard items drop at ${cosmeticRate()}% each. Starters have equal per-type odds. Each effect: 1/600 (about 0.1667%). Ten draws use the same independent odds.`,`덱 받침·묘지 ${furnitureCount()}종은 각각 ${cosmeticRate()}%. 스타터는 종류별 동일 확률, 각 이펙트는 1/600 (약 0.1667%). 10회도 매회 같은 추첨입니다.`)}</p><p>${l('重複還元：スターター8枚所持時50／家具100／エフェクト500シャード。','Duplicates: 50 Shards for starters at 8 copies / 100 for owned furniture / 500 for owned effects.','중복 환급: 스타터 8장 보유 시 50 / 보유 가구 100 / 이펙트 500샤드.')}</p>`;
 export interface ShopGachaMount { ():void; update(credits:number,draw?: (count:number)=>Promise<CollectionResult>):void; }
 export function mountShopGacha(host:HTMLElement,options:{variant?:GachaVariant;credits:number;tutorial?:boolean;onResultsClosed?:()=>void;draw?:(count:number)=>Promise<CollectionResult>}):ShopGachaMount {
  const warmTimer=setTimeout(()=>{if(host.isConnected)void prepareGachaCinematic().catch(()=>{});},350);
@@ -75,7 +74,7 @@ export function mountShopGacha(host:HTMLElement,options:{variant?:GachaVariant;c
    <div class="gacha-table-bottom">
     <section class="gacha-table-prizes" aria-label="${l('主な獲得アイテム','Featured rewards','주요 획득 아이템')}"><small>${l('主な獲得アイテム','Featured rewards','주요 획득 아이템')}</small><div class="gacha-table-prize-list">
      <button data-info="starter"><span class="gacha-prize-art gacha-prize-hand">${COLLECTIBLE_STARTERS.slice(0,3).map(sample).join('')}</span><span>${shopRewardCategoryName('starter')}</span></button>
-     <button data-info="cosmetic"><span class="gacha-prize-art gacha-prize-hand">${['sleeve:gacha-goldfault','sleeve:gacha-amethyst-cleft','sleeve:gacha-elfweave'].map(sample).join('')}</span><span>${shopRewardCategoryName('cosmetic')}</span></button>
+     <button data-info="cosmetic"><span class="gacha-prize-art gacha-prize-hand">${['furniture:gacha-goldfault','furniture:gacha-amethyst-cleft','furniture:gacha-elfweave'].map(sample).join('')}</span><span>${shopRewardCategoryName('cosmetic')}</span></button>
      <button data-info="effect"><span class="gacha-prize-art gacha-prize-effect">${sample('effect:prism-veil')}</span><span>${shopRewardCategoryName('effect')}</span></button>
     </div></section>
     <section class="gacha-table-controls" aria-label="${l('ガチャを回す','Draw from the collection','뽑기')}">

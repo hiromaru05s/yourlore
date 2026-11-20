@@ -20,7 +20,7 @@ import {cardEffectId} from './cardEffects';
 import { DEW_SHIELD_CARDS, DEW_SHIELD_STARTERS, applyDewShieldRework, localizeDewShieldCards } from './dewShieldCards';
 import { applyBalance58, NIGHT_CASTLE_GIFT } from './balance58';
 import { applyBalance57 } from './balance57';
-import {COSMETICS,equipmentId} from './cosmetics';
+import {equipmentId} from './cosmetics';
 import { EXPANSION_CARDS, COUNTER_IDS } from "./expansionCards";
 import { QUEST_QUICK_CARDS } from "./questQuickCards";
 // ============================================================
@@ -2641,7 +2641,7 @@ export const SLEEVES: Record<string, Sleeve> = {
   default: { id: "default", url: FRAME_BACK, ko: "기본", ja: "デフォルト", en: "Default", price: 0 },
 };
 /** ordered list for shop/picker rendering (default first). */
-Object.assign(SLEEVES,Object.fromEntries(COSMETICS.filter(c=>c.kind==='sleeve').map(c=>[c.id,c])));
+// Non-default sleeves are temporarily unavailable, including previously equipped IDs.
 export const SLEEVE_LIST: Sleeve[] = Object.values(SLEEVES);
 export function sleeveUrl(id: string | null | undefined): string { return SLEEVES[id||"default"]?.url||FRAME_BACK; }
 

@@ -1,24 +1,18 @@
+import {cardStockShape} from './cardStockShape';
 import {sleeveMaterial} from './cosmetics/sleeve';
 import {pileCenter,STOCK_THICKNESS} from './readingBoardLayout';
-/** Blender furniture mounting and reusable thin, rounded card stock. */
+/** Blender furniture mounting and reusable thin, frame-shaped card stock. */
 import * as T from 'three';
 import { CARD_PADDING } from './cardSurface';
 
 export interface PileModel { group:T.Group; cards:T.Group; top:T.Object3D; }
 const RATIO=1/.64;
-function rounded(w:number,h:number,r:number):T.Shape {
-  const s=new T.Shape(),x=-w/2,y=-h/2;
-  s.moveTo(x+r,y);s.lineTo(x+w-r,y);s.quadraticCurveTo(x+w,y,x+w,y+r);
-  s.lineTo(x+w,y+h-r);s.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
-  s.lineTo(x+r,y+h);s.quadraticCurveTo(x,y+h,x,y+h-r);
-  s.lineTo(x,y+r);s.quadraticCurveTo(x,y,x+r,y);return s;
-}
 // CPU-only templates never enter a scene. Instances own their cloned buffers,
 // so existing disposal remains safe while triangulation runs only once.
 let templates:{edge:T.ExtrudeGeometry;face:T.ShapeGeometry;padded:T.PlaneGeometry}|undefined;
 function stockGeometry(){
   if(!templates){
-    const shape=rounded(.94,RATIO*.94,.12);
+    const shape=cardStockShape(RATIO);
     const edge=new T.ExtrudeGeometry(shape,{depth:STOCK_THICKNESS,bevelEnabled:false,curveSegments:4});edge.translate(0,0,-STOCK_THICKNESS/2);
     const face=new T.ShapeGeometry(shape,4),p=face.getAttribute('position'),uv=face.getAttribute('uv');
     for(let i=0;i<p.count;i++)uv.setXY(i,p.getX(i)+.5,p.getY(i)/RATIO+.5);
@@ -26,8 +20,8 @@ function stockGeometry(){
   }
   return templates;
 }
-/** Same 0.64 proportions/rounded stock as the moving PaperCard, with fewer
- * vertices for resting stacks. The sleeve is shared, never per-card geometry. */
+/** Same 0.64 proportions and authored perimeter as the moving PaperCard.
+ * Geometry templates are shared; each instance owns its buffers for disposal. */
 export function cardStock(map:T.Texture, face?:T.Texture, edgesOnly=false):T.Group {
   const g=new T.Group();g.name='card-stock';
   const geometry=stockGeometry(),edge=new T.BufferGeometry().copy(geometry.edge);

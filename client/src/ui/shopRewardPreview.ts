@@ -1,4 +1,4 @@
-import {GACHA_COSMETICS,cosmetic} from '../shared/cosmetics';
+import {AVAILABLE_GACHA_COSMETICS,cosmetic} from '../shared/cosmetics';
 import {CARD_EFFECTS} from '../shared/cardEffects';
 import {COLLECTIBLE_STARTERS} from '../shared/collection';
 import {DB,STARTERS} from '../shared/cards';
@@ -8,11 +8,11 @@ import {disposeCardEffects} from './cardFinish';
 import {loungeText as l} from './loungeText';
 
 export type ShopRewardCategory='starter'|'cosmetic'|'effect';
-export const shopRewardCategoryName=(kind:ShopRewardCategory)=>kind==='starter'?l('スターター','Starters','스타터'):kind==='cosmetic'?l('スリーブ・デッキ・墓地','Sleeves · Deck · Graveyard','슬리브·덱·묘지'):l('エフェクト','Effects','이펙트');
+export const shopRewardCategoryName=(kind:ShopRewardCategory)=>kind==='starter'?l('スターター','Starters','스타터'):kind==='cosmetic'?l('デッキ置き場＆墓地','Deck holder & graveyard','덱 받침 & 묘지'):l('エフェクト','Effects','이펙트');
 export const sample=(id:string)=>`<span class="shop-reward-sample" data-sample-id="${esc(id)}"></span>`;
 export function shopLineup(kind?:ShopRewardCategory){
  return (kind?[kind]:['starter','cosmetic','effect'] as const).map(category=>{
-  const entries=category==='starter'?COLLECTIBLE_STARTERS.map(id=>({id,name:cardName({...(STARTERS[id]??DB[id]),uid:id})})):category==='cosmetic'?GACHA_COSMETICS.map(item=>({id:item.id,name:item[getLang()]})):CARD_EFFECTS.map(item=>({id:item.id,name:item[getLang()]}));
+  const entries=category==='starter'?COLLECTIBLE_STARTERS.map(id=>({id,name:cardName({...(STARTERS[id]??DB[id]),uid:id})})):category==='cosmetic'?AVAILABLE_GACHA_COSMETICS.map(item=>({id:item.id,name:item[getLang()]})):CARD_EFFECTS.map(item=>({id:item.id,name:item[getLang()]}));
   return `<section data-lineup-category="${category}">${kind?'':`<h3>${shopRewardCategoryName(category)}</h3>`}<div class="shop-reward-grid">${entries.map(item=>`<article data-reward-id="${esc(item.id)}">${sample(item.id)}<strong>${esc(item.name)}</strong></article>`).join('')}</div></section>`;
  }).join('');
 }

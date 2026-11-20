@@ -37,7 +37,7 @@ export function sleeveMaterial(texture:T.Texture):T.Material{
 
  const living=livingFromUrl(texture.userData.url||(texture.image as HTMLImageElement)?.currentSrc||(texture.image as HTMLImageElement)?.src);
  if(living){const m=animatedMaterial(living.variant,false,texture);m.onBeforeRender=()=>{m.uniforms.time.value=matchMedia('(prefers-reduced-motion: reduce)').matches?0:performance.now()/1000;};return m;}
- const theme=themeFromUrl(texture.userData.url||(texture.image as HTMLImageElement)?.currentSrc||(texture.image as HTMLImageElement)?.src);if(!theme)return new T.MeshBasicMaterial({map:texture,toneMapped:false});
+ const theme=themeFromUrl(texture.userData.url||(texture.image as HTMLImageElement)?.currentSrc||(texture.image as HTMLImageElement)?.src);if(!theme)return new T.MeshBasicMaterial({map:texture,toneMapped:false,transparent:true,alphaTest:.025});
  const map=finishMap(theme),material=new T.MeshPhysicalMaterial({name:'atelier-sleeve-'+theme.id,map:texture,color:0xc5c9cf,roughnessMap:map,metalnessMap:map,roughness:1,metalness:.75,clearcoat:theme.surface==='leather'?.12:.8,clearcoatRoughness:.16,iridescence:theme.id==='porcelain'?.35:0,envMapIntensity:.75,bumpMap:map,bumpScale:.0008});
  if(theme.motion){
   const active={value:1},time={value:0},tint={value:new T.Color(theme.accent)},mode=theme.motion==='emissive_pulse'?1:0;
