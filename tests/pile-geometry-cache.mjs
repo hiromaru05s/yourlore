@@ -5,7 +5,10 @@ import path from 'node:path';
 import {tmpdir} from 'node:os';
 const temp=await fs.mkdtemp(path.join(tmpdir(),'lore-pile-'));
 const out=process.env.LORE_TEST_OUTPUT;if(out)await fs.mkdir(out,{recursive:true});
-const before=process.env.LORE_BASELINE_PILE?await fs.readFile(process.env.LORE_BASELINE_PILE,'utf8'):await fs.readFile(new URL('../docs/performance/2026-10-14-loading/baseline-pileModels.ts',import.meta.url),'utf8');
+const historical=process.env.LORE_BASELINE_PILE?await fs.readFile(process.env.LORE_BASELINE_PILE,'utf8'):await fs.readFile(new URL('../docs/performance/2026-10-14-loading/baseline-pileModels.ts',import.meta.url),'utf8');
+// Compare caching against uncached construction of the currently authored silhouette.
+assert(historical.includes('const shape=rounded(.94,RATIO*.94,.12);'));
+const before="import {cardStockShape} from './cardStockShape';\n"+historical.replace('const shape=rounded(.94,RATIO*.94,.12);','const shape=cardStockShape(RATIO);');
 try {
  await build({stdin:{contents:`export {makePile as before} from 'before-pile';export {makePile as after} from './client/src/ui/pileModels';export {Texture} from 'three';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:path.join(temp,'pile.mjs'),loader:{'.css':'empty'},plugins:[{name:'baseline',setup(b){b.onResolve({filter:/^before-pile$/},()=>({path:'before-pile',namespace:'baseline'}));b.onLoad({filter:/.*/,namespace:'baseline'},()=>({contents:before,resolveDir:path.resolve('client/src/ui'),loader:'ts'}));}}]});
  const {before:old,after:current,Texture}=await import(path.join(temp,'pile.mjs')),texture=new Texture(),face=new Texture();

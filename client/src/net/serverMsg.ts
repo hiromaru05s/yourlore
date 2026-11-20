@@ -8,6 +8,7 @@
 import { getLang } from "../i18n";
 
 const M: Record<string, { ja: string; en: string; ko?:string }> = {
+  "このスリーブは現在利用できません": {ja:"このスリーブは現在利用できません。",en:"This sleeve is currently unavailable.",ko:"현재 이 슬리브를 사용할 수 없습니다."},
   "Complete the tutorial, two normal matches and all three dojo opponents": {ja:"基礎実習、ノーマル2戦、3人のNPCへの勝利を達成してください。",en:"Complete basic practice, two normal duels and victories over all three NPCs.",ko:"기초 실습, 노멀 두 경기, NPC 세 명에게 승리를 달성해 주세요."},
   "Complete the chapter objectives first": {ja:"先にこの章の実習・対戦目標を達成してください。",en:"Complete this chapter’s practice and duel objectives first.",ko:"먼저 이 장의 실습·대전 목표를 달성해 주세요."},
   "Invalid scene": {ja:"この場面を確認できませんでした。章一覧から開き直してください。",en:"Could not find this scene. Open it again from the chapter list.",ko:"이 장면을 확인하지 못했어요. 장 목록에서 다시 열어 주세요."},
