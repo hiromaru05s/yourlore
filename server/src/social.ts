@@ -1,3 +1,4 @@
+import {isFreeSleeve} from '../../client/src/shared/freeSleeves';
 import {isCardFrame} from '../../client/src/shared/cardFrames';
 import {rankedProfile} from './rankedProfile';
 import {parseUsername} from '../../client/src/shared/username';
@@ -175,9 +176,9 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
     if (typeof body.stats_public === "boolean") { sets.push("stats_public = ?"); args.push(body.stats_public ? 1 : 0); }
     for(const kind of ['sleeve','furniture'] as const){
       const id=body[kind];if(typeof id!=='string')continue;
-      if(kind==='sleeve'&&id!=='default')return json(env,{error:'このスリーブは現在利用できません'},400);
+      if(kind==='sleeve'&&!isFreeSleeve(id))return json(env,{error:'このスリーブは現在利用できません'},400);
       const row=await env.DB.prepare('SELECT sleeves FROM users WHERE id = ?').bind(user.id).first<{sleeves:string|null}>();
-      if(id!=='default'&&(!ownedCosmetics(row?.sleeves).includes(id)||cosmetic(id)?.kind!==kind))return json(env,{error:'未所持の商品です'},400);
+      if(id!=='default'&&!(kind==='sleeve'&&isFreeSleeve(id))&&(!ownedCosmetics(row?.sleeves).includes(id)||cosmetic(id)?.kind!==kind))return json(env,{error:'未所持の商品です'},400);
       sets.push(`${kind} = ?`);args.push(id==='default'?null:id);
     }
     if (!sets.length) return json(env, { error: "no changes" }, 400);

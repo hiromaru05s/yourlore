@@ -19,6 +19,8 @@ db.exec(await fs.readFile('server/migrations/0032_profile_background.sql','utf8'
  let store=structuredClone(user.decks);store.list[0].name='星のデッキ';store.list[0].sleeve='default';store.list[0].furniture='default';store.list[1].name='森のデッキ';store.list[1].representative='STARTER_CHEST';store.list[1].sleeve='sleeve:gacha-amethyst-cleft';store.list[1].furniture='furniture:gacha-amethyst-cleft';store.list[8].name='第九書庫';store.list[8].avatar='SEEKER_HOODED';store.list[8].background='violet';store.list[1].background='rose';store.sel=1;
  let r=await worker.fetch(request('/api/deck',{decks:store}),env);assert.equal(r.status,200);let saved=(await r.json()).decks;store.list[1].sleeve='default';assert.deepEqual(saved,store);assert.deepEqual(JSON.parse(db.prepare('SELECT sleeves FROM users WHERE id=?').get('a').sleeves),own,'owned cosmetics are retained');
  user=await getUser(env,request('/api/auth/me'));assert.equal(user.sleeve,'default');assert.equal(user.furniture,'furniture:gacha-amethyst-cleft');assert.equal(user.decks.list[0].sleeve,'default','explicit default does not inherit active legacy cache');assert.equal(user.decks.list[0].name,'星のデッキ');
+ // The free eye sleeve can be equipped without a purchased inventory entry.
+ store.list[1].sleeve='sleeve:indigo-eye';r=await worker.fetch(request('/api/deck',{decks:store}),env);assert.equal(r.status,200);assert.equal((await getUser(env,request('/api/auth/me'))).sleeve,'sleeve:indigo-eye');
  assert.equal((await duelAppearance(env,'a')).background,'rose');
  const ninth={...store,sel:8};r=await worker.fetch(request('/api/deck',{decks:ninth}),env);assert.equal(r.status,200);
  assert.deepEqual(await duelAppearance(env,'a'),{avatar:'SEEKER_HOODED',medal:null,background:'violet'});
@@ -28,11 +30,16 @@ db.exec(await fs.readFile('server/migrations/0032_profile_background.sql','utf8'
  r=await worker.fetch(request('/api/deck',{deck:store.list[1].cards}),env);assert.equal(r.status,200);assert.deepEqual((await r.json()).decks,store,'legacy single deck save preserves name/watch/equipment');
  // Stale compatibility columns cannot override canonical preset data on auth or queues.
  db.prepare("UPDATE users SET sleeve='default',furniture='default' WHERE id='a'").run();
- await worker.fetch(request('/ws/queue?sleeve=crimson&furniture=furniture:gacha-elfweave'),env);assert.equal(queued.searchParams.get('sleeve'),'default');assert.equal(queued.searchParams.get('furniture'),'furniture:gacha-amethyst-cleft');assert.equal(queued.searchParams.get('deck'),store.list[1].cards.join(','));
+ await worker.fetch(request('/ws/queue?sleeve=crimson&furniture=furniture:gacha-elfweave'),env);assert.equal(queued.searchParams.get('sleeve'),'sleeve:indigo-eye');assert.equal(queued.searchParams.get('furniture'),'furniture:gacha-amethyst-cleft');assert.equal(queued.searchParams.get('deck'),store.list[1].cards.join(','));
  db.prepare('INSERT INTO challenges VALUES(?,?,?,?,?,?)').run('challenge','a','b','pending',Date.now(),null);
- r=await worker.fetch(request('/api/social/challenge/respond',{id:'challenge',accept:true},'b'),env);assert.equal(r.status,200);assert.equal(setup.players[0].sleeve,'default');assert.equal(setup.players[0].furniture,'furniture:gacha-amethyst-cleft');assert.equal(setup.players[1].sleeve,'default');
- store.sel=0;r=await worker.fetch(request('/api/deck',{decks:store}),env);assert.equal(r.status,200);user=await getUser(env,request('/api/auth/me'));assert.equal(user.sleeve,'default');assert.equal(user.furniture,'default');assert.equal(user.decks.list[1].sleeve,'default');assert.equal(db.prepare('SELECT credits FROM users WHERE id=?').get('a').credits,15);
+ r=await worker.fetch(request('/api/social/challenge/respond',{id:'challenge',accept:true},'b'),env);assert.equal(r.status,200);assert.equal(setup.players[0].sleeve,'sleeve:indigo-eye');assert.equal(setup.players[0].furniture,'furniture:gacha-amethyst-cleft');assert.equal(setup.players[1].sleeve,'default');
+ store.sel=0;r=await worker.fetch(request('/api/deck',{decks:store}),env);assert.equal(r.status,200);user=await getUser(env,request('/api/auth/me'));assert.equal(user.sleeve,'default');assert.equal(user.furniture,'default');assert.equal(user.decks.list[1].sleeve,'sleeve:indigo-eye');assert.equal(db.prepare('SELECT credits FROM users WHERE id=?').get('a').credits,15);
  assert.equal(sanitizeDecks({list:[{sleeve:'furniture:gacha-goldfault',furniture:'sleeve:gacha-goldfault'}]}).list[0].sleeve,'default');assert.equal(deckStoreForUser({decks:store,sleeve:'sleeve:gacha-elfweave'}).list[0].sleeve,'default');
+ // Fresh/legacy accounts with empty or absent inventory get both choices for free.
+ for(const inventory of [null,'[]']){
+  db.prepare("UPDATE users SET sleeves=?,credits=0 WHERE id='b'").run(inventory);
+  for(const sleeve of ['sleeve:indigo-eye','default']){const fresh=deckStoreForUser();fresh.list[0].sleeve=sleeve;r=await worker.fetch(request('/api/deck',{decks:fresh},'b'),env);assert.equal(r.status,200);assert.equal((await getUser(env,request('/api/auth/me',undefined,'b'))).sleeve,sleeve);assert.deepEqual({...db.prepare("SELECT sleeves,credits FROM users WHERE id='b'").get()},{sleeves:inventory,credits:0});}
+ }
  assert.equal((await worker.fetch(new Request('https://test.yourlore.xyz/api/deck',{method:'POST',body:'{}'}),env)).status,401);
  db.close();console.log('PASS real Worker routes + SQLite: nine independent presets, legacy inheritance, explicit default, ownership/atomic save, name/watch preservation, auth/queue/friendly propagation, selected deck switching, credits unchanged');
 }finally{await fs.rm(dir,{recursive:true,force:true});}

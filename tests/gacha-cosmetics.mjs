@@ -17,7 +17,8 @@ try{
   const decks=sanitizeDecks({active:0,list:[{cards:[],watch:[],sleeve:sleeve.id,furniture:furniture.id}]});
   assert.equal(decks.list[0].sleeve,'default');assert.equal(sleeveUrl(sleeve.id),FRAME_BACK);assert.equal(decks.list[0].furniture,furniture.id);
  }
- assert.deepEqual(SLEEVE_LIST.map(s=>s.id),['default']);
+ assert.deepEqual(SLEEVE_LIST.map(s=>s.id),['default','sleeve:indigo-eye']);
+ for(const raw of [null,undefined,'[]','null','invalid'])for(const sleeve of SLEEVE_LIST){assert(ownedCosmetics(raw).includes(sleeve.id));assert.equal(equipmentId(sleeve.id,'sleeve'),sleeve.id);assert.equal(sleeveUrl(sleeve.id),sleeve.url);await access('client/public'+sleeve.url);}
  assert.deepEqual(AVAILABLE_GACHA_COSMETICS,GACHA_COSMETICS.filter(c=>c.kind!=='sleeve'));
  assert(AVAILABLE_GACHA_COSMETICS.length>0);
  assert.equal(gachaFromUrl('/frames/sleeve_default.webp'),undefined);

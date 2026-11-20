@@ -1,0 +1,60 @@
+{
+  "viewport": {
+    "width": 1920,
+    "height": 1080
+  },
+  "checks": [
+    {
+      "sleeves": [
+        "default",
+        "sleeve:indigo-eye"
+      ],
+      "backs": [
+        "url(\"http://127.0.0.1:5473/frames/sleeve_indigo_eye.webp\")",
+        "url(\"http://127.0.0.1:5473/frames/sleeve_indigo_eye.webp\")",
+        "url(\"http://127.0.0.1:5473/frames/sleeve_indigo_eye.webp\")",
+        "url(\"http://127.0.0.1:5473/frames/sleeve_indigo_eye.webp\")"
+      ]
+    },
+    {
+      "sleeves": [
+        "sleeve:indigo-eye",
+        "default"
+      ],
+      "backs": [
+        "url(\"http://127.0.0.1:5473/frames/sleeve_default.webp\")",
+        "url(\"http://127.0.0.1:5473/frames/sleeve_default.webp\")",
+        "url(\"http://127.0.0.1:5473/frames/sleeve_default.webp\")",
+        "url(\"http://127.0.0.1:5473/frames/sleeve_default.webp\")"
+      ]
+    }
+  ],
+  "loaded": [
+    {
+      "url": "http://127.0.0.1:5473/frames/sleeve_default.webp",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5473/frames/sleeve_default.webp",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5473/frames/sleeve_default.webp",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5473/frames/sleeve_indigo_eye.webp",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5473/frames/sleeve_indigo_eye.webp",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5473/frames/sleeve_default.webp",
+      "status": 200
+    }
+  ],
+  "errors": [],
+  "boundary": "Current GameView fixture using actual registered sleeve IDs and assets; no request/image substitution."
+}

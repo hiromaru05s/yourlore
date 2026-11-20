@@ -1,3 +1,4 @@
+import {isFreeSleeve} from '../shared/freeSleeves';
 import {deckFurniturePreview} from './deckFurniturePreview';
 import {CARD_FRAMES} from '../shared/cardFrames';
 import {disposeCardEffects} from './cardFinish';
@@ -9,7 +10,7 @@ import {cardEl} from './cardView';
 import {bindZoom,zoomCard} from './cardInspection';
 import {DB,STARTERS,deckRepresentative} from '../shared/cards';
 import {finishArtPreview} from './finishArtPreview';
-import {SLEEVE_LIST,type DeckPreset} from '../shared/cards';
+import {SLEEVE_LIST,sleeveUrl,type DeckPreset} from '../shared/cards';
 import {FURNITURE_LIST,cosmetic} from '../shared/cosmetics';
 import {getLang,esc} from '../i18n';
 import {loungeText} from './loungeText';
@@ -21,7 +22,7 @@ export function renderDeckAppearance(host:HTMLElement,options:AppearanceOptions)
  const featured=deckRepresentative(deck);
  host.dataset.group=options.group ?? '';
  const key=JSON.stringify([getLang(),options.group,featured,name,error,owned?[...owned].sort():null]);
- const current=views.get(host),appearance=JSON.stringify([deck.effect??'default',deck.frame??'default']);
+ const current=views.get(host),appearance=JSON.stringify([deck.effect??'default',deck.frame??'default',deck.sleeve]);
  if(current?.key===key&&host.querySelector('.deck-appearance-groups')){
   current.options=options;
   for(const button of host.querySelectorAll<HTMLButtonElement>('[data-cosmetic-id]')){
@@ -32,7 +33,7 @@ export function renderDeckAppearance(host:HTMLElement,options:AppearanceOptions)
   }
   if(current.appearance!==appearance){
    const section=host.querySelector<HTMLElement>('.deck-appearance-preview')!;
-   const previous=section.querySelector<HTMLElement>(':scope > .card,:scope > .deck-finish-art');
+   const previous=section.querySelector<HTMLElement>(':scope > .card,:scope > .deck-finish-art,:scope > .deck-sleeve-preview');
    if(previous){disposeCardFrames(previous);disposeCardEffects(previous);previous.remove();}
    appendAppearancePreview(section,deck,options.group);current.appearance=appearance;
   }
@@ -50,11 +51,11 @@ export function renderDeckAppearance(host:HTMLElement,options:AppearanceOptions)
   const list=kind==='frame'?[{id:'default',ja:'通常の白枠',en:'Original frame',ko:'기본 프레임',url:''},...CARD_FRAMES]:kind==='effect'?[{id:'default',ja:'なし',en:'None',ko:'없음',url:''},...CARD_EFFECTS]:kind==='sleeve'?SLEEVE_LIST:[{id:'default',ja:'デフォルト',en:'Default',ko:'기본',url:''},...FURNITURE_LIST];
   const section=document.createElement('section');section.className='deck-cosmetic-group';section.dataset.kind=kind;section.setAttribute('aria-label',title);
   section.innerHTML=`<h4>${title}</h4><div class="deck-cosmetic-grid">${list.map(item=>{
-   const selected=(deck[kind]??'default')===item.id,unlocked=!!owned?.has(item.id),label=item[getLang()];
+   const selected=(deck[kind]??'default')===item.id,unlocked=(kind==='sleeve'&&isFreeSleeve(item.id))||!!owned?.has(item.id),label=item[getLang()];
    const url=kind==='furniture'?deckFurniturePreview(item.id):item.url;
    return `<button type="button" class="deck-cosmetic ${selected?'is-selected':''}" data-cosmetic-kind="${kind}" data-cosmetic-id="${item.id}" aria-pressed="${selected}" aria-label="${esc(label)}" ${unlocked?'':'disabled'}><span class="deck-cosmetic-art ${kind==='furniture'?'furniture-preview':'sleeve-preview'}" style="${url?`background-image:url('${url}')`:''}"></span><span class="deck-cosmetic-name">${esc(label)}</span><span class="deck-cosmetic-state">${selected?loungeText('選択中','Selected','선택됨'):unlocked?loungeText('選択する','Select','선택'):(kind==='effect'||('gachaOnly' in (cosmetic(item.id)??{})))?loungeText('ガチャで入手','Get in gacha','뽑기로 획득'):loungeText('ショップで入手','Get in shop','상점에서 획득')}</span></button>`;
   }).join('')}</div>`;
-  if(kind==='sleeve'){const note=document.createElement('p');note.textContent=loungeText('現在はデフォルトのスリーブのみ利用できます。','Only the default sleeve is currently available.','현재 기본 슬리브만 사용할 수 있습니다.');section.querySelector('h4')!.after(note);}
+  if(kind==='sleeve'){const note=document.createElement('p');note.textContent=loungeText('この2種類は最初から利用できます。','Both sleeves are available from the start.','이 두 슬리브는 처음부터 사용할 수 있습니다.');section.querySelector('h4')!.after(note);}
   if(kind==='frame'){
    const scope=document.createElement('p');scope.className='deck-frame-scope';scope.textContent=loungeText('スターター・対戦中の購入カードを含む全カードに適用。プレイ後もフレームが続きます。','Applies to the whole deck, including starters and cards bought during a duel. Frames remain after play.','스타터와 대전 중 구매한 카드를 포함한 모든 카드에 적용되며 플레이 후에도 유지됩니다.');section.querySelector('h4')!.after(scope);
    section.querySelectorAll<HTMLElement>('[data-cosmetic-id]').forEach(button=>{const slot=button.querySelector('.deck-cosmetic-art')!;slot.className='deck-frame-preview';slot.removeAttribute('style');slot.append(cardEl({...(STARTERS[featured] ?? DB[featured]),uid:'frame-picker-'+button.dataset.cosmeticId},{size:'mkt',effect:'default',frame:button.dataset.cosmeticId}));});
@@ -72,6 +73,9 @@ export function renderDeckAppearance(host:HTMLElement,options:AppearanceOptions)
 
 function appendAppearancePreview(section:HTMLElement,deck:DeckPreset,group?:CosmeticGroup){
  const featured=deckRepresentative(deck);
+ if(group==='sleeve'){
+  const image=new Image();image.className='deck-sleeve-preview';image.src=sleeveUrl(deck.sleeve);image.alt=SLEEVE_LIST.find(s=>s.id===deck.sleeve)?.[getLang()]??SLEEVE_LIST[0][getLang()];section.append(image);return;
+ }
  if(group==='effect'){
    section.append(finishArtPreview(featured,deck.effect));
    return;

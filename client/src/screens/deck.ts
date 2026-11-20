@@ -1,3 +1,4 @@
+import {FREE_SLEEVE_IDS,isFreeSleeve} from '../shared/freeSleeves';
 import {deckName,mountDeckLibrary} from './deckLibrary';
 import {backgroundNames,openAppearancePicker} from '../ui/appearancePicker';
 import {characterAppearance} from '../ui/characterAppearance';
@@ -325,7 +326,7 @@ export function mountDeck(app: App, options:{tutorial?:boolean;slot?:number;sing
     if(watching)void revealCards(watchEl,watchNodes,()=>watchVersion===watchRevision);else {cancelRevealCards(watchEl);watchEl.replaceChildren();}
     if(activeTab==='appearance')renderDeckAppearance(q('deckAppearanceSection'),{
       group:cosmeticGroup,deck:store.list[cur],name:store.list[cur].name||t('deck.slot').replace('{n}',String(cur+1)),owned,error:cosmeticError,
-      onPick:(kind,id)=>{if(!owned?.has(id)||saving)return;store.list[cur][kind]=id;render();msgEl.textContent=loungeText('外観を変更しました。「保存」で確定します。','Appearance changed. Save to keep your changes.','외형을 변경했습니다. 저장해 주세요.');},
+      onPick:(kind,id)=>{if(saving||(!owned?.has(id)&&!(kind==='sleeve'&&isFreeSleeve(id))))return;store.list[cur][kind]=id;render();msgEl.textContent=loungeText('外観を変更しました。「保存」で確定します。','Appearance changed. Save to keep your changes.','외형을 변경했습니다. 저장해 주세요.');},
       onShop:()=>app.shop(),onRetry:()=>{void loadOwned();},
     });
     saveBtn.disabled = saving || store.list.some(d => d.cards.length !== DECK_SIZE);
@@ -375,7 +376,7 @@ export function mountDeck(app: App, options:{tutorial?:boolean;slot?:number;sing
 
   const loadOwned=async()=>{
     cosmeticError=false;
-    try {const profile=isLocalDevAccount()?loadLocalGuestProfile():await api.profile();if(dead)return;owned=new Set(['default',...(profile.sleeves??[]),...('furnitures' in profile?profile.furnitures??[]:[]),...('effects' in profile?profile.effects??[]:[]),...('frames' in profile?profile.frames??[]:[])]);}
+    try {const profile=isLocalDevAccount()?loadLocalGuestProfile():await api.profile();if(dead)return;owned=new Set([...FREE_SLEEVE_IDS,...(profile.sleeves??[]),...('furnitures' in profile?profile.furnitures??[]:[]),...('effects' in profile?profile.effects??[]:[]),...('frames' in profile?profile.frames??[]:[])]);}
     catch {if(dead)return;cosmeticError=true;}
     render();
   };

@@ -1,3 +1,4 @@
+import {FREE_SLEEVES} from './freeSleeves';
 import {balance99Prints} from './balance99';
 import {balance98Prints} from './balance98';
 import {balanceChanges} from './novemberBalance';
@@ -2634,14 +2635,10 @@ export function fieldFrameFor(t: CardType): string {
 }
 export const FRAME_BACK = "/frames/sleeve_default.webp";
 
-// ---- card sleeves (card backs). The game now uses one universal sleeve.
-// Legacy multi-sleeve shop/ownership was retired (backup/local-0801 merge). ----
+// ---- Standard card sleeves, available to all players. Other sleeves stay disabled. ----
 export interface Sleeve { id: string; url: string; ko: string; ja: string; en: string; price: number; }
-export const SLEEVES: Record<string, Sleeve> = {
-  default: { id: "default", url: FRAME_BACK, ko: "기본", ja: "デフォルト", en: "Default", price: 0 },
-};
-/** ordered list for shop/picker rendering (default first). */
-// Non-default sleeves are temporarily unavailable, including previously equipped IDs.
+export const SLEEVES: Record<string, Sleeve> = FREE_SLEEVES;
+/** Ordered list for the deck picker (default first). */
 export const SLEEVE_LIST: Sleeve[] = Object.values(SLEEVES);
 export function sleeveUrl(id: string | null | undefined): string { return SLEEVES[id||"default"]?.url||FRAME_BACK; }
 

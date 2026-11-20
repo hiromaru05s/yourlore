@@ -1,0 +1,25 @@
+{
+  "tool": "built-in imagegen",
+  "prompts": [
+    {
+      "key": "eye",
+      "prompt": "Use case: precise-object-edit. Edit image 1, the indigo sleeve. Replace ONLY its central LORE wordmark with the eye emblem from the O of the official logo in image 2. NO LETTERS, NO WORDMARK, NO TEXT anywhere. Retain the elegant abstract almond-shaped eye, vertical diamond pupil and slim enclosing compass circle with its four restrained points, all in softly brushed pale silver foil. The isolated emblem should be centered, about 25 percent of card width, delicately drawn, not a giant realistic eyeball. Preserve image 1's complete 1024x1536 layout, exact outer die-cut silhouette, thin silver perimeter, tiny corner engraving, indigo color, texture, empty space and transparency. Same silhouette as the newly approved LORE front card: gently arched top, tiny upper lateral tips, concave sides, tiny bottom center tip, no top center protrusion. Do not thicken the border, add ornament, change lighting or add perspective. Deliver one straight-on game texture, transparent outside the card.",
+      "paths": [
+        "/Users/hiromaru05s/.codex/worktrees/nameplate-board-1119/LORE_TCG/client/public/previews/sleeve-indigo-1120/sleeve.png",
+        "/Users/hiromaru05s/.codex/worktrees/nameplate-board-1119/LORE_TCG/client/public/art/brand/lore-logo-transparent.png"
+      ]
+    },
+    {
+      "key": "default",
+      "prompt": "Use case: precise-object-edit. Image 1 is the CURRENT DEFAULT LORE card sleeve to edit. Image 2 is the newly approved thin-border reference, NOT a replacement for the original central artwork. Change ONLY the perimeter frame of image 1: its ivory/silver perimeter band is too thick. Reduce this border to approximately one third of its current visual thickness, a slender satin silver edge with fine warm ivory highlight like image 2. Expand the dark blue artwork field into the recovered space. Preserve image 1's central blue glowing abstract eye, silver ornamental lattice, blue crystals, red gem accents, arrangement, color, symmetry and style; this is the classic ornate alternative to the minimal indigo eye sleeve. Critically preserve the current exact outer silhouette and canvas framing, 1024x1536: gently arched upper corners, tiny upper side tips, slightly concave sides, tiny bottom center point. No extra top-center protrusion, ordinary rounded rectangle, lettering, perspective, tabletop or background. Preserve transparent outside the die-cut card. Deliver a single flat front-on texture. The intended change is a noticeably thinner outer border, not a redesign of the interior.",
+      "paths": [
+        "/Users/hiromaru05s/.codex/worktrees/nameplate-board-1119/LORE_TCG/client/public/frames/sleeve_default.png",
+        "/Users/hiromaru05s/.codex/worktrees/nameplate-board-1119/LORE_TCG/client/public/previews/sleeve-indigo-1120/sleeve.png"
+      ]
+    }
+  ],
+  "outputs": {
+    "eye": "exec-ba63a1eb-ea20-4a30-849e-5b1e754a9bfa.png",
+    "default": "exec-2af5ec01-1911-4b46-b0fe-df440d02bfb8.png"
+  }
+}

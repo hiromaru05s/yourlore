@@ -1,3 +1,4 @@
+import {FREE_SLEEVE_IDS} from '../shared/freeSleeves';
 import {profileBackground, type ProfileBackground} from '../shared/profileAppearance';
 import {SEEKER_ID} from '../ui/seekerMotion';
 import { t } from '../i18n';
@@ -51,16 +52,16 @@ export function loadLocalGuestProfile(): LocalGuestProfile {
   try {
     const saved = JSON.parse(localStorage.getItem(LOCAL_GUEST_PROFILE_KEY) || "null") as Partial<LocalGuestProfile> | null;
     if (saved && Number.isFinite(saved.credits) && Array.isArray(saved.sleeves)) {
-      return { avatar:saved.avatar ?? SEEKER_ID, background:profileBackground(saved.background), credits: Math.max(0, Math.floor(saved.credits!)), sleeves: [...new Set(["default", ...saved.sleeves])], sleeve: equipmentId(saved.sleeve,'sleeve') };
+      return { avatar:saved.avatar ?? SEEKER_ID, background:profileBackground(saved.background), credits: Math.max(0, Math.floor(saved.credits!)), sleeves: [...new Set([...FREE_SLEEVE_IDS, ...saved.sleeves])], sleeve: equipmentId(saved.sleeve,'sleeve') };
     }
   } catch { /* create a fresh local profile */ }
-  const profile = { credits: 12, sleeves: ["default", "prism"], sleeve: "default" };
+  const profile = { credits: 12, sleeves: [...FREE_SLEEVE_IDS], sleeve: "default" };
   saveLocalGuestProfile(profile);
   return profile;
 }
 
 export function saveLocalGuestProfile(profile: LocalGuestProfile): LocalGuestProfile {
-  const saved = { avatar:profile.avatar ?? SEEKER_ID, background:profileBackground(profile.background), credits: Math.max(0, Math.floor(profile.credits)), sleeves: [...new Set(["default", ...profile.sleeves])], sleeve: equipmentId(profile.sleeve,'sleeve') };
+  const saved = { avatar:profile.avatar ?? SEEKER_ID, background:profileBackground(profile.background), credits: Math.max(0, Math.floor(profile.credits)), sleeves: [...new Set([...FREE_SLEEVE_IDS, ...profile.sleeves])], sleeve: equipmentId(profile.sleeve,'sleeve') };
   localStorage.setItem(LOCAL_GUEST_PROFILE_KEY, JSON.stringify(saved));
   return saved;
 }
