@@ -1,0 +1,221 @@
+{
+  "at": "2026-11-20T06:01:46.253Z",
+  "assets": [
+    {
+      "url": "/art/cards/ARCANE_DISMANTLER.webp",
+      "status": 200,
+      "sha256": "5d5450407f8e839566680f493878ae6ca8272af81b88592ffffb1d73ac1ffb1e",
+      "expected": "5d5450407f8e839566680f493878ae6ca8272af81b88592ffffb1d73ac1ffb1e",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/art/cards/BLOOD_BIRTH.webp",
+      "status": 200,
+      "sha256": "7519701542fd588b93628884973a77aca17e0235b41d74690f787b871cf66df3",
+      "expected": "7519701542fd588b93628884973a77aca17e0235b41d74690f787b871cf66df3",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/art/cards/COMRADE_AID.webp",
+      "status": 200,
+      "sha256": "d5c368758a3453249f13c2f4414f07b516c1eb254f8c04b9bd85d985dca4b737",
+      "expected": "d5c368758a3453249f13c2f4414f07b516c1eb254f8c04b9bd85d985dca4b737",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/art/cards/EXECUTION.webp",
+      "status": 200,
+      "sha256": "c17a3af4fc1b27cff890e3e9f9df1f0f314a9fd7eaa9183e59f3d9ee7d2972be",
+      "expected": "c17a3af4fc1b27cff890e3e9f9df1f0f314a9fd7eaa9183e59f3d9ee7d2972be",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/art/cards/EXILED_HEXER.webp",
+      "status": 200,
+      "sha256": "1dad8c08ea23776e7abacb7f4e8df74313e8319ad3bd2300c8b18ba140217c9c",
+      "expected": "1dad8c08ea23776e7abacb7f4e8df74313e8319ad3bd2300c8b18ba140217c9c",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/art/cards/PRIMAL_CIVILIZATION.webp",
+      "status": 200,
+      "sha256": "a5d05e9c8628efda243cf730f231d467aa9fdfaa8a6c11a35dc4f04dd3187547",
+      "expected": "a5d05e9c8628efda243cf730f231d467aa9fdfaa8a6c11a35dc4f04dd3187547",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/art/cards/RUNE_GUIDANCE.webp",
+      "status": 200,
+      "sha256": "ec465f0e9321d54b69dd6d3ff2b553bb3fbba0b09bb864584bfd866c9684faa3",
+      "expected": "ec465f0e9321d54b69dd6d3ff2b553bb3fbba0b09bb864584bfd866c9684faa3",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/art/cards/RUNE_PEBBLE.webp",
+      "status": 200,
+      "sha256": "6bb5b6cb6a42e9b4fa8973919048aa8a1e5b4dfcc202201d9cdbb54496134f12",
+      "expected": "6bb5b6cb6a42e9b4fa8973919048aa8a1e5b4dfcc202201d9cdbb54496134f12",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/art/cards/SHIELD_STRIKE.webp",
+      "status": 200,
+      "sha256": "23e782a495405f01d6c9280c87b054e5df952d20061cf65af81ec156b8c12a7a",
+      "expected": "23e782a495405f01d6c9280c87b054e5df952d20061cf65af81ec156b8c12a7a",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/art/cards/SUBSTITUTE.webp",
+      "status": 200,
+      "sha256": "0535a12487865cce5220133f5482527a8d6f2c1dbf411f024d4e836551f6c762",
+      "expected": "0535a12487865cce5220133f5482527a8d6f2c1dbf411f024d4e836551f6c762",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/art/cards-sm/ARCANE_DISMANTLER.webp",
+      "status": 200,
+      "sha256": "e9d59a7162eafab0744002af01a41dca48f4636842d53b22aadf18fa14b12763",
+      "expected": "e9d59a7162eafab0744002af01a41dca48f4636842d53b22aadf18fa14b12763",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/art/cards-sm/BLOOD_BIRTH.webp",
+      "status": 200,
+      "sha256": "47c076abefa1ea434f820d7b41036782a054407a7c79936d9ae8102230a02e35",
+      "expected": "47c076abefa1ea434f820d7b41036782a054407a7c79936d9ae8102230a02e35",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/art/cards-sm/COMRADE_AID.webp",
+      "status": 200,
+      "sha256": "4de3f1f3a0548989d52057fe8999a4754a3705e3a70ff9594724bb7e4940d919",
+      "expected": "4de3f1f3a0548989d52057fe8999a4754a3705e3a70ff9594724bb7e4940d919",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/art/cards-sm/EXECUTION.webp",
+      "status": 200,
+      "sha256": "60d69e5e30dc6d0b7114087c25b7beca658941eee7ca617b35a9ca50268b1aac",
+      "expected": "60d69e5e30dc6d0b7114087c25b7beca658941eee7ca617b35a9ca50268b1aac",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/art/cards-sm/EXILED_HEXER.webp",
+      "status": 200,
+      "sha256": "9306da0ec8cf1df9f5e3c93a57732109e74d2cc04fbfd70d217f1d31a1b24743",
+      "expected": "9306da0ec8cf1df9f5e3c93a57732109e74d2cc04fbfd70d217f1d31a1b24743",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/art/cards-sm/PRIMAL_CIVILIZATION.webp",
+      "status": 200,
+      "sha256": "d440a536d4a46994a458bcc396cdb00026071e73111151f8b498fe7c5e5b40c0",
+      "expected": "d440a536d4a46994a458bcc396cdb00026071e73111151f8b498fe7c5e5b40c0",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/art/cards-sm/RUNE_GUIDANCE.webp",
+      "status": 200,
+      "sha256": "6ff70fcff2d291e10aa085c853723f54ee6d3baad23129febf2845e5a68cd997",
+      "expected": "6ff70fcff2d291e10aa085c853723f54ee6d3baad23129febf2845e5a68cd997",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/art/cards-sm/RUNE_PEBBLE.webp",
+      "status": 200,
+      "sha256": "b3f4b7a367c0f22108267c3b87a6a7d0de0fb9fe3e98ac57d4326eb36e4228f8",
+      "expected": "b3f4b7a367c0f22108267c3b87a6a7d0de0fb9fe3e98ac57d4326eb36e4228f8",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/art/cards-sm/SHIELD_STRIKE.webp",
+      "status": 200,
+      "sha256": "5a5c995f76b9dac6bc026a32c3fe03bffd6b2911f9a11551b7be00d1bfaf118a",
+      "expected": "5a5c995f76b9dac6bc026a32c3fe03bffd6b2911f9a11551b7be00d1bfaf118a",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/art/cards-sm/SUBSTITUTE.webp",
+      "status": 200,
+      "sha256": "d303546609013087612e09d3cd7c5006ef9eb160599c00907d71594219be0b53",
+      "expected": "d303546609013087612e09d3cd7c5006ef9eb160599c00907d71594219be0b53",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/art/cards-xs/ARCANE_DISMANTLER.webp",
+      "status": 200,
+      "sha256": "8fa613cdddb9ae11aae493bbd7976bbc85faf96513c59f4a5e0366df889b7c4e",
+      "expected": "8fa613cdddb9ae11aae493bbd7976bbc85faf96513c59f4a5e0366df889b7c4e",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/art/cards-xs/BLOOD_BIRTH.webp",
+      "status": 200,
+      "sha256": "31579ce07db92d888765865719ac846ded6597f29c0c233ee07acdf31744aeea",
+      "expected": "31579ce07db92d888765865719ac846ded6597f29c0c233ee07acdf31744aeea",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/art/cards-xs/COMRADE_AID.webp",
+      "status": 200,
+      "sha256": "0edd22167d9de8dcd839438778e4ebd38a5aa61908daf82a6a89bc6cc806b9d2",
+      "expected": "0edd22167d9de8dcd839438778e4ebd38a5aa61908daf82a6a89bc6cc806b9d2",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/art/cards-xs/EXECUTION.webp",
+      "status": 200,
+      "sha256": "451ff469222e6f02aae676b2b8f67e6e0998845e56aede2eaae4d77e29314a98",
+      "expected": "451ff469222e6f02aae676b2b8f67e6e0998845e56aede2eaae4d77e29314a98",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/art/cards-xs/EXILED_HEXER.webp",
+      "status": 200,
+      "sha256": "5cb0d1190aacafa7f0874a5b7269a43223936200bfcb0302259296476ff9d6de",
+      "expected": "5cb0d1190aacafa7f0874a5b7269a43223936200bfcb0302259296476ff9d6de",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/art/cards-xs/PRIMAL_CIVILIZATION.webp",
+      "status": 200,
+      "sha256": "00f5ec672f79fc125cc65a7b13b2b770b9653af8b2cd005d9e282311096ad5ef",
+      "expected": "00f5ec672f79fc125cc65a7b13b2b770b9653af8b2cd005d9e282311096ad5ef",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/art/cards-xs/RUNE_GUIDANCE.webp",
+      "status": 200,
+      "sha256": "ff33d58e486eb40bf1329c42a504c6780f90c164a3206be13a4c44ff15cb9224",
+      "expected": "ff33d58e486eb40bf1329c42a504c6780f90c164a3206be13a4c44ff15cb9224",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/art/cards-xs/RUNE_PEBBLE.webp",
+      "status": 200,
+      "sha256": "3e004da285fbfcfe878df0b25526ec8cf4c1bb12f2363b7b875cfd952e78cde9",
+      "expected": "3e004da285fbfcfe878df0b25526ec8cf4c1bb12f2363b7b875cfd952e78cde9",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/art/cards-xs/SHIELD_STRIKE.webp",
+      "status": 200,
+      "sha256": "e3ace8d5dfe56f838ba9ee7916e3bfae013999c662e83b67f65862814713ff78",
+      "expected": "e3ace8d5dfe56f838ba9ee7916e3bfae013999c662e83b67f65862814713ff78",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/art/cards-xs/SUBSTITUTE.webp",
+      "status": 200,
+      "sha256": "ad4df66c510ce2f110a5eafd420694e7ed6a0c1e3d8ef39aa572f30e12daf18c",
+      "expected": "ad4df66c510ce2f110a5eafd420694e7ed6a0c1e3d8ef39aa572f30e12daf18c",
+      "cache": "public, max-age=0, must-revalidate"
+    }
+  ],
+  "index": {
+    "status": 200,
+    "cache": "public, max-age=0, must-revalidate",
+    "entry": "/assets/main-D1FMvdL1.js",
+    "entrySha256": "c95efb04be4a6062d554c76df59494eff50537fbf724696ca996c07add8eea33"
+  }
+}

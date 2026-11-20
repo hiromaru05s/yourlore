@@ -1,0 +1,31 @@
+{
+  "at": "2026-11-20T06:02:41.174Z",
+  "url": "https://yourlore.xyz",
+  "commit": "82b40185817073ff162803ecf87adcc4bbfb37d3",
+  "deployment": {
+    "id": "644ea642-1ffa-47a9-8a5e-cbcd003a5813",
+    "createdOn": "2026-11-20T06:01:09.868266Z",
+    "annotation": "82b40185817073ff162803ecf87adcc4bbfb37d3 guarded release",
+    "versions": [
+      {
+        "version_id": "42ce355c-df6c-421c-a0c5-0857249db4b8",
+        "percentage": 100
+      }
+    ]
+  },
+  "checks": {
+    "productionTests": 309,
+    "focusedRuleChecks": 57,
+    "cardDetailViews": 114,
+    "localizedCardTexts": 1338,
+    "newArtFiles": 30,
+    "servedBuildFiles": 11,
+    "publicPage": {
+      "status": 200,
+      "title": "LORE — Deckbuild Duel",
+      "text": "한국어\n日本語\nEnglish\nLog in\nSign up\nLog in with your email.\nEMAIL\nPASSWORD\nLog in\nCan't log in?\nor\nContinue with Google",
+      "errors": []
+    }
+  },
+  "boundary": "Actual component browser fixtures and public production smoke; no authenticated production PvP match was performed."
+}

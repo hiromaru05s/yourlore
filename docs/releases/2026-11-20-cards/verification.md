@@ -30,3 +30,11 @@ Current adopted sources: `client/src/shared/cards.ts`, `engine.ts`, `ui/cardView
 ## Evidence boundary
 
 Browser reports use API/board fixtures with actual served production components. They do not prove an authenticated production PvP match. Production deployment ID, exact committed source and served asset hashes are recorded after the guarded release.
+
+## Guarded production release
+
+- Source commit: `82b40185817073ff162803ecf87adcc4bbfb37d3`.
+- `npm run deploy`: committed isolated snapshot, remote-main/previous-release guards, production schema verification, client/server typecheck, **309/309** production suites and production build all passed.
+- Deployment: `644ea642-1ffa-47a9-8a5e-cbcd003a5813`; Worker version `42ce355c-df6c-421c-a0c5-0857249db4b8`, **100%**, at `2026-11-20T06:01:09.868266Z`.
+- Verified `https://yourlore.xyz`: all 30 new card-art files match local SHA-256; 11 live entry/core UI files match the exact guarded build. Public login page returned HTTP 200 with no page errors.
+- Adjacent `release.json`, `production-tests.json`, `served-assets.json`, and `served-build.json` contain the final evidence. This evidence-only documentation commit does not change runtime behavior.
