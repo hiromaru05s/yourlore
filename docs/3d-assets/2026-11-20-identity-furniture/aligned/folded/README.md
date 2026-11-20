@@ -26,3 +26,7 @@ Runtime model: `client/public/models/reading-board/identity-folded-1120/identity
 ## Additional self-side optical correction
 
 After reviewing `685e064c0`, the user requested a further small downward correction. The self-side guide and its furniture/icon edges move another 4 px at 1920×1080 (2.67 px at 1280×720). The portrait stays fixed. Nameplate dimensions, pitch and the opponent-side layout stay unchanged; the entire self mana/name/insignia assembly moves together. This is an intentional optical offset beyond the source image alpha bounds, and the updated mesh measurements use that corrected guide.
+
+## Opponent monster spacing
+
+Following the preview at `8d74f130c`, only the opponent monster row in `client/src/ui/readingBoardLayout.ts` moves .018 m farther from the market (Z=-.195 to -.213). Self monsters and all other layout anchors remain unchanged. At native 1920×1080 / 1280×720, the market clearance is 21.66 / 14.45 px and the gap to the opponent permanent-icon row is 25.49 / 15.90 px. The native browser fixture was visually checked, with no page errors; the preview origin above is unchanged.

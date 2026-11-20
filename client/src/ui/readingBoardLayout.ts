@@ -33,7 +33,8 @@ export function placeReadingBoard(root:HTMLElement):void {
  place('.sub-head',-.037,.092,.065,.065,true);
  place('.mid-aside',.7,0,.13,.13);
  for(const [id,sign] of [['me',1],['opp',-1]] as const){
-  place(`#${id}Row .zone-row:has(.zone-mon)`,0,sign*.195,.85,.171875);
+  const monsterZ=id==='opp'?-.213:.195;
+  place(`#${id}Row .zone-row:has(.zone-mon)`,0,monsterZ,.85,.171875);
   // Keep all seven persistent cards between the portrait and the deck column.
   const buffIcons=root.dataset.buffIcons==='true';
   const spellsLeft=Math.max(buffIcons?.105:.13,portraitSize/(2*s)+.015);
