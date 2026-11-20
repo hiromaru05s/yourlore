@@ -18,4 +18,11 @@ Ordinary GameView fixture (`/nameplate-board.html`, no preview feature attribute
 
 Seven-slot browser checks passed at 1440×900, 1920×1080, 1280×720, 1366×768, 390×844 and 844×390, including quest inspection and long player names (`layout-checks.json`).
 
-TypeScript, full production suite, deployment guard and served-asset verification are recorded in the release report after completion. Fixture checks are not authenticated live PvP verification.
+Released source: `60ddcb996143f76f4a68191839b75f8273f762e3`. The standard production deployment guard built a clean committed snapshot and deployed it on 2026-11-20 at 03:41 UTC. Worker version `ecff7fd3-de7c-4bf3-b326-8c589593221f` serves 100% of traffic (`deployment.json`).
+
+- Client/server TypeScript and production database schema checks passed.
+- Production suite: 308/308 passed (`production-suite.json`). Initial guard stopped before deployment on four regressions: the cache test used the historical silhouette, two integration tests expected now-disabled sleeves, and the unavailable-sleeve message needed JA/EN/KO localization. Updated current-shape cache comparison, disabled-equipment/ownership assertions and translations all passed the full rerun.
+- Eight served frame/model assets match source SHA-256 (`served-assets.json`). Live entry and relevant game, board, card surface and CSS chunks match the exact guarded build (`served-build.json`).
+- Live public login page returned 200 and rendered without page errors (`live-smoke.json`).
+
+Fixture checks and served asset verification are not authenticated live PvP verification. No user inventory was deleted and no data migration was required.

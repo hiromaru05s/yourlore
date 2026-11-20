@@ -1,0 +1,72 @@
+{
+  "at": "2026-11-20T03:42:52.446Z",
+  "entry": "assets/main-DwGX-nTq.js",
+  "checks": [
+    {
+      "path": "assets/board-CpQTFRMr.js",
+      "status": 200,
+      "sha256": "c9a22c3622c7618a76bed86450752a10e9221560eea3a9ef218d71ff636dee0e",
+      "cache": "public, max-age=31536000, immutable"
+    },
+    {
+      "path": "assets/board-EjOz0x4N.js",
+      "status": 200,
+      "sha256": "c8256889431c9b97331acf437f196b6c6f610581827ade00767d5a3a98d46786",
+      "cache": "public, max-age=31536000, immutable"
+    },
+    {
+      "path": "assets/cardSurface-Ce9ICxsh.js",
+      "status": 200,
+      "sha256": "67bf48047e77ec4a7bfda3e8b503af02d0e353c32e3a667bde7d22d372f9fe08",
+      "cache": "public, max-age=31536000, immutable"
+    },
+    {
+      "path": "assets/duelAssets-CgWVc-CH.js",
+      "status": 200,
+      "sha256": "7e9321ffe6fe184bd6f1ab41256e184a49945a71a7a37a426ae71cba9acf5d5d",
+      "cache": "public, max-age=31536000, immutable"
+    },
+    {
+      "path": "assets/duelScene-DAWa64VY.js",
+      "status": 200,
+      "sha256": "c092712b831b3ae6f84758deb87e987385197934b7cf0976ce720ef5cf7d9ea0",
+      "cache": "public, max-age=31536000, immutable"
+    },
+    {
+      "path": "assets/game-CUhcTYvS.js",
+      "status": 200,
+      "sha256": "898b4367faf36005397b6d79a55639fcf020ae1c0522d8be8ca1ab2ddf051491",
+      "cache": "public, max-age=31536000, immutable"
+    },
+    {
+      "path": "assets/game-CeZ0_T_p.css",
+      "status": 200,
+      "sha256": "c3a917c33744ff03edb04c76979bf8fb070230e7358a5da1272b96b7bac52062",
+      "cache": "public, max-age=31536000, immutable"
+    },
+    {
+      "path": "assets/main-BalXma47.css",
+      "status": 200,
+      "sha256": "583a9f0ec21a6d067578aa00e19d6520552b8bee7f84c0b45a03ef7391036ba8",
+      "cache": "public, max-age=31536000, immutable"
+    },
+    {
+      "path": "assets/main-C0OdNiuw.js",
+      "status": 200,
+      "sha256": "8060b8348e826dd2e730fba2beb0cdf1bf97a8ccfa23590396d7f3cfea88461e",
+      "cache": "public, max-age=31536000, immutable"
+    },
+    {
+      "path": "assets/main-DwGX-nTq.js",
+      "status": 200,
+      "sha256": "6ccbfcc5bcf136d59402b6e7b6ce59f972d346c31a38876dc9a27f3626e7660a",
+      "cache": "public, max-age=31536000, immutable"
+    },
+    {
+      "path": "assets/readingBoardLayout-C59aniTE.js",
+      "status": 200,
+      "sha256": "b9858d48a4b481000d3cdb85111cb449ba1fadcd9886bd2211bc5f6c07eba30c",
+      "cache": "public, max-age=31536000, immutable"
+    }
+  ]
+}
