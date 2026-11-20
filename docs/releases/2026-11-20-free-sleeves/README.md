@@ -24,4 +24,13 @@ Built-in imagegen outputs and exact prompts are in `imagegen.json`. Masters: `cl
 - Visuals inspected: `eye-picker.png`, `default-self-eye-opponent.png` and `eye-self-default-opponent.png`.
 - Preview cwd: `/Users/hiromaru05s/.codex/worktrees/nameplate-board-1119/LORE_TCG/client`, port 5473; `/sleeve-indigo-preview.html` and `/nameplate-board.html` use the current sources.
 
-Full production-suite and live deployment evidence will be added after the guard completes. Fixture checks are not authenticated live PvP verification.
+## Production release
+
+Released source: `74ebbe2d3065a00fd5078c7edc36f73d50e47f75`. The standard guard completed client/server typecheck, database schema validation, 308/308 production tests and build. Worker version `33b92e32-a22d-465e-b49d-44bd09871a64` serves 100% of traffic, deployed at 2026-11-20 04:35 UTC (`deployment.json`).
+
+- Nine live art/model assets, including both sleeve WebPs, match the committed source hashes (`served-assets.json`).
+- Eleven live main/game/board/card surface/CSS chunks match the exact guarded build (`served-build.json`).
+- Public login page returns 200 and renders without page errors (`live-smoke.json`).
+- Default sleeve draw checks pass at 1280px and 390px for both sides, privacy, cancellation, normal timing and cleanup (`draw-check.json`). That regression fixture uses its historical board; the current board visuals are the screenshots above.
+
+Fixture checks and served assets are not authenticated live PvP verification. No inventory migration, deletion or user balance changes were needed.

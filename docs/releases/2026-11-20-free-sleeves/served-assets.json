@@ -1,0 +1,74 @@
+{
+  "at": "2026-11-20T04:35:38.887Z",
+  "assets": [
+    {
+      "url": "/art/biblion/modular/base-mon-print.webp",
+      "status": 200,
+      "sha256": "abfe63cab7e811a7e981a17a3060b7ef7e10bae9b9d9ba5e7799b23124d0242d",
+      "expected": "abfe63cab7e811a7e981a17a3060b7ef7e10bae9b9d9ba5e7799b23124d0242d",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/art/biblion/modular/base-spell-print.webp",
+      "status": 200,
+      "sha256": "4e4e8e72ad40ea15eeb34aee357d31afb46833d1de36e6cf29a55ea10ac9474a",
+      "expected": "4e4e8e72ad40ea15eeb34aee357d31afb46833d1de36e6cf29a55ea10ac9474a",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/art/biblion/modular/base-quest-print.webp",
+      "status": 200,
+      "sha256": "c2e2fedce05a94b70a81c6ff0774638fd553d7438a8eacc859f0c558d43f80e6",
+      "expected": "c2e2fedce05a94b70a81c6ff0774638fd553d7438a8eacc859f0c558d43f80e6",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/art/biblion/modular/field-mon-print.webp",
+      "status": 200,
+      "sha256": "264af41426a0135ada6a9f10747c1bd5a76c1141c142403bf5c7276da3f947e8",
+      "expected": "264af41426a0135ada6a9f10747c1bd5a76c1141c142403bf5c7276da3f947e8",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/art/biblion/modular/field-spell-print.webp",
+      "status": 200,
+      "sha256": "7577e55e0e1e90d4d5b43da1e441e313b0a065260532bbb46132c3541ab24d75",
+      "expected": "7577e55e0e1e90d4d5b43da1e441e313b0a065260532bbb46132c3541ab24d75",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/frames/sleeve_default.webp",
+      "status": 200,
+      "sha256": "ca293aaa79d36851880d23c32379224a550563102ec3b0d249498d0b18470c35",
+      "expected": "ca293aaa79d36851880d23c32379224a550563102ec3b0d249498d0b18470c35",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/frames/sleeve_indigo_eye.webp",
+      "status": 200,
+      "sha256": "6cdc20dd0273bd997ca6f6b248b3b3c37dbed4d9b512053668a6e68626a2ea83",
+      "expected": "6cdc20dd0273bd997ca6f6b248b3b3c37dbed4d9b512053668a6e68626a2ea83",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/models/reading-board/identity-folded-1120/identity-addon.glb",
+      "status": 200,
+      "sha256": "011ae3a52e6e90caf886fa8022dffae68878a87f48453e36fc5d2890fe9b0e16",
+      "expected": "011ae3a52e6e90caf886fa8022dffae68878a87f48453e36fc5d2890fe9b0e16",
+      "cache": "public, max-age=0, must-revalidate"
+    },
+    {
+      "url": "/models/reading-board/identity-aligned-1120/shelf.glb",
+      "status": 200,
+      "sha256": "29423a2c7356000de5fc4f889d5886f5211e1a7cce5ff97acba1f1392061efd4",
+      "expected": "29423a2c7356000de5fc4f889d5886f5211e1a7cce5ff97acba1f1392061efd4",
+      "cache": "public, max-age=0, must-revalidate"
+    }
+  ],
+  "index": {
+    "status": 200,
+    "cache": "public, max-age=0, must-revalidate",
+    "entry": "/assets/main-DhWy0BlA.js",
+    "entrySha256": "a1a1270c2966ee30f94faf06dcb6b4d0910f487672a67f8b2be8ca1342b86f04"
+  }
+}
