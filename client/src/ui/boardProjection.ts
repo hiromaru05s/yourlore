@@ -50,7 +50,7 @@ export function projectBoardDOM(root:HTMLElement):void {
       const pose=rail?.[side].name??identityNameplatePose(side);
       const manaZ=rail?.[side].manaZ??sign*.397;
       seat(label,(rail?RAIL.manaX:-.345)+.0415,manaZ+pose.faceZ,.237,rail?rail.nameDepth-.020:.0205,.012+pose.faceY,pose.pitch);
-      const rank=root.querySelector<HTMLElement>(`.identity-rank-sample[data-side="${side}"]`);
+      const rank=root.querySelector<HTMLElement>(`.identity-rank-sample[data-side="${side}"],.identity-rank[data-side="${side}"]`);
       if(rank){
         if(rail)seat(rank,RAIL.manaX+RAIL.badgeX,manaZ+pose.faceZ,.059,Math.min(.043,rail.nameDepth-.014),.012+pose.faceY,pose.pitch);
         else seat(rank,-.135,sign*.397-.016,.031*IDENTITY_RANK_SCALE,.024*IDENTITY_RANK_SCALE,.0175);

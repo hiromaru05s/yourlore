@@ -1,0 +1,17 @@
+#app.reading-board[data-identity-furniture=true] .portrait .pt-name.pt-name--azure {
+ background:none!important;border:0;box-shadow:none;color:#e3ddc8;text-shadow:0 1px 1px #101c28;
+ font-size:clamp(6px,calc(var(--board-meter)*.014),15px);z-index:30;
+}
+#app.reading-board[data-identity-furniture=true] .portrait .pt-name .pt-identity{width:94%}
+#app.reading-board[data-identity-furniture=true] .portrait .pt-level{color:#c6b68f}
+.identity-rank-sample,.identity-rank{position:absolute;pointer-events:none;z-index:30;line-height:0}
+.identity-rank-sample svg,.identity-rank svg{display:block;width:100%;height:100%;overflow:visible}
+#app:not([data-insignia-samples=on]) .identity-rank-sample{visibility:hidden}
+.identity-rank{visibility:hidden}
+#app.reading-board .identity-rank{visibility:visible}
+#app.reading-board[data-aligned-rail=true] .portrait .pt-name.pt-name--azure {
+ font-size:clamp(10px,calc(var(--board-meter)*.020),23px);
+}
+#app.reading-board[data-aligned-rail=true] .pile .pile-count {
+ bottom:calc(var(--board-meter)*.004);right:4%;
+}

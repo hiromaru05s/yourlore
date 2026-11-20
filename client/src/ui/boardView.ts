@@ -1,3 +1,6 @@
+import '../styles/duelIdentityFurniture.css';
+import '../styles/duelBuffIcons.css';
+import {renderDuelRanks} from './duelRanks';
 import '../styles/handPhysics.css';
 import {highlightAttackTarget,highlightAttackSource,prepareAttackTarget} from './attackTarget';
 import '../styles/duelNameplate.css';
@@ -139,6 +142,7 @@ export class GameView {
 
   constructor(root: HTMLElement, you: Side, h: BoardHandlers) {
     this.root = root;
+    root.dataset.identityFurniture='true';root.dataset.alignedRail='true';root.dataset.buffIcons='true';
     this.you = you;
     this.h = h;
     this.cardCounters = createBoardCardCounters(root);
@@ -505,6 +509,7 @@ export class GameView {
     this.q("portraitMe").classList.toggle("is-active", myTurn);
     this.q("portraitOpp").classList.toggle("is-active", !myTurn && !g.over);
 
+    renderDuelRanks(this.root,g.duelProfiles,this.you);
     this.renderOpponentHand(opp);
     this.renderRow(this.q("oppRow"), g, opp, false, myTurn, pending);
     this.renderRow(this.q("meRow"), g, me, true, myTurn, pending);

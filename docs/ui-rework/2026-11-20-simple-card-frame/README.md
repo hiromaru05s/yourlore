@@ -44,3 +44,5 @@ Saved masters: `client/public/art/biblion/modular/{base,field}-{mon,spell}.png` 
 ![Actual component comparison](comparison.png)
 
 Built-in imagegen asset provenance and prompt records: [imagegen.json](imagegen.json).
+
+2026-11-20 follow-up: user authorized production release. The production adoption and release evidence are tracked in `docs/releases/2026-11-20-identity-board/`.
